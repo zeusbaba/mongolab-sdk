@@ -1,4 +1,5 @@
-mongolab-for-android
+mongolab-sdk
 ====================
 
-Android SDK and App for Mongolab.com
+SDKs for Mongolab.com     
+Android, iOS, JS, ....
