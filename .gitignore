@@ -14,3 +14,16 @@ gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+*~
+*.DS_Store
+*.class
+*java#
+*.classpath
+*.project
+*.settings
+*/bin/
+*/gen/
+.classpath
+.project
+.settings
