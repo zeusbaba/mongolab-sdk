@@ -31,6 +31,10 @@ import com.wareninja.android.opensource.mongolab_sdk.common.ResponseMeta;
 import com.wareninja.android.opensource.mongolab_sdk.common.ResponseModel;
 
 
+/**
+ * Implementation of MongoLab RESTful interface: 
+ * @see: https://support.mongolab.com/entries/20433053-REST-API-for-MongoDB
+ */
 public class MongoLabHelper {
 
 	private static final String TAG = MongoLabHelper.class.getSimpleName();
@@ -63,7 +67,11 @@ public class MongoLabHelper {
     }
     
     /*
-     * GET list of DATABASES
+     * >> List databases
+     * get the databases linked to the authenticated account:
+     * 	GET /databases
+     * Example:
+     * 	https://api.mongolab.com/api/1/databases?apiKey=myAPIKey
      */
     public void listDatabases(final GenericRequestListener reqListener) {
     	
@@ -114,7 +122,12 @@ public class MongoLabHelper {
 	}
 
     /*
-     * GET list of COLLECTIONS from the specific database
+     * >> List collections
+     * To get the collections in the specified database: 
+     * 	GET /databases/{database}/collections
+     * Example:
+     * https://api.mongolab.com/api/1/databases/my-db/collections?apiKey=myAPIKey
+     * 
      */
     public void listCollections(String database
     		, final GenericRequestListener reqListener) {
@@ -168,7 +181,17 @@ public class MongoLabHelper {
 	}
     
     /*
-     * GET list of DOCUMENTS from the specific collection
+     * List documents
+     * To get the documents in the specified collection. If no parameters are passed, it lists all of them. Otherwise, it lists the documents 
+     * in the collection matching the specified parameters:
+     * 
+     * GET /databases/{database}/collections/{collection}
+     * 
+     * Example listing all documents in a given collection:
+     * https://api.mongolab.com/api/1/databases/my-db/collections/my-coll?apiKey=myAPIKey
+     * 
+     * Optional parameters:
+     * [q=<query>][&c=true][&f=<fields>][&fo=true][&s=<order>][&sk=<skip>][&l=<limit>]
      */
     public void listDocuments(String database, String collection
     		, final GenericRequestListener reqListener) {
@@ -225,6 +248,13 @@ public class MongoLabHelper {
     /*
      * CREATE DOCUMENTS in a specific collection
      * p.s. if collection doesn't exists already, it will be created right away!
+     * 
+     * >> Insert multiple documents
+     * To add multiple documents to the specified collection, specify a list of documents in the data payload:
+     * POST /databases/{database}/collections/{collection}
+     * Content-Type: application/json
+     * Body: <JSON data>
+     * 
      */
     public void createDocuments(String database, String collection, List<String> documents
     		, final GenericRequestListener reqListener) {
