@@ -2,7 +2,22 @@
 <resources>
 
     <string name="app_name">mongolab-android</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
 
+    <!-- FIXME: you MUST use your own apiKey!!! see docs: https://support.mongolab.com/entries/20433053-REST-API-for-MongoDB -->
+    
+    <!-- base url for MONGOLAB REST API -->
+    <string name="api_base_url">https://api.mongolab.com/api/1</string>
+    <!-- GET list of databases -->
+    <string name="api_endpoint_databases">/databases</string>
+    <!-- GET list of COLLECTIONS from the specific database -->
+    <string name="api_endpoint_collections">/databases/%s/collections</string>
+    
+    <!-- GET DOCUMENTS from the specific collection 
+    Optional parameters:
+	[q=<query>][&c=true][&f=<fields>][&fo=true][&s=<order>][&sk=<skip>][&l=<limit>] 
+	-->
+    <string name="api_endpoint_documents" formatted="false">/databases/%s/collections/%s</string>
+    
+    
+    
 </resources>
