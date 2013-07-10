@@ -217,6 +217,11 @@ public class AsyncTaskExecutor extends AsyncTaskEx<Bundle, Void, Bundle> {
 				
 				rawResponse = webService.webInvokeWithJsonPUT(target, extraParams.getString(AppContext.API_PARAM_JSONBODY));
 			}
+			else if (AppContext.HTTP_ACTION.DELETE.equals(httpAction)) {
+				target += (target.contains("&"))? "&":"?";
+				target += AppContext.API_PARAM_APIKEY+"="+extraParams.getString(AppContext.API_PARAM_APIKEY);
+				rawResponse = webService.webDelete(target, extraParams);
+			}
 			else {
 				rawResponse = webService.webGet(target, extraParams);
 			}

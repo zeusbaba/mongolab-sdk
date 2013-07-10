@@ -41,6 +41,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -73,6 +74,7 @@ public class WebService {
 	private Collection<RequestHeader> headers = new LinkedList<RequestHeader>();
 
 	HttpResponse response = null;
+	HttpDelete httpDelete = null; // DELETE
 	HttpPut httpPut = null;// PUT
 	HttpPost httpPost = null; // POST
 	HttpGet httpGet = null; // GET
@@ -465,6 +467,81 @@ public class WebService {
 		return ret;
 	}
 
+	
+	public String webDelete(String methodName, Bundle params) {
+		Map<String, String> reqParams = new HashMap<String, String>();
+
+		// TODO: do checks to avoid fups!
+		for (String key : params.keySet()) {
+			// reqParams.put(key, params.getString(key));
+			reqParams.put(key, params.get(key) + "");
+		}
+
+		return webDelete(methodName, reqParams);
+	}
+	public String webDelete(String methodName, Map<String, String> params) {
+
+		String deleteUrl;
+		if (methodName.startsWith(webServiceUrl)) {
+			deleteUrl = methodName;
+		} else {
+			deleteUrl = webServiceUrl + methodName;
+		}
+
+		int i = 0;
+		for (Map.Entry<String, String> param : params.entrySet()) {
+			if (i == 0) {
+				deleteUrl += "?";
+			} else {
+				deleteUrl += "&";
+			}
+
+			try {
+				deleteUrl += param.getKey() + "="
+						+ URLEncoder.encode(param.getValue(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			i++;
+		}
+
+		httpDelete = new HttpDelete(deleteUrl);
+		if (AppContext.isDebugMode()) Log.d(TAG, "WebDeleteURL: " + deleteUrl);
+
+		for (RequestHeader header : headers) {
+			if (header != null) {
+				httpDelete.setHeader(header.getKey(), header.getValue());
+
+				if (AppContext.isDebugMode()) {
+					Log.d(TAG, String.format("httpDelete.setHeader(%s, %s)", header.getKey(), header.getValue()) );
+				}
+			}
+		}
+
+		try {
+			response = httpClient.execute(httpDelete);
+
+			mHttpResponseCode = response.getStatusLine().getStatusCode();
+		} catch (Exception e) {
+			Log.w(TAG, "ex:"+e.getMessage()+" |ÊhttpClient.execute step1 - "+mHttpResponseCode);
+		}
+
+		// we assume that the response body contains the error message
+		try {
+
+			ret = EntityUtils.toString(response.getEntity());
+			mHttpResponseCode = response.getStatusLine().getStatusCode();
+		} catch (IOException e) {
+			//Log.e(TAG, e.getMessage());
+			Log.w(TAG, "ex:"+e.getMessage()+" |Êstep2 - mHttpResponseCode: "+mHttpResponseCode);
+		}
+		if (AppContext.isDebugMode()) Log.d(TAG, "mHttpResponseCode: "+mHttpResponseCode);
+
+		return ret;
+	}
+	
 	// use this method for plain POST only!
 	public String webPost(String methodName, Bundle params)
 			throws MalformedURLException, IOException {
@@ -487,7 +564,7 @@ public class WebService {
 				conn.setRequestProperty(header.getKey(), header.getValue());
 
 				if (AppContext.isDebugMode()) {
-					Log.d(TAG, String.format("httpGet.setHeader(%s, %s)", header.getKey(), header.getValue()) );
+					Log.d(TAG, String.format("httpDelete.setHeader(%s, %s)", header.getKey(), header.getValue()) );
 				}
 			}
 		}*/

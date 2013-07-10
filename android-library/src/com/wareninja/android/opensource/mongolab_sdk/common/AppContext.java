@@ -53,7 +53,7 @@ public class AppContext {
     public static String API_PARAM_APIKEY = "apiKey";
     
 	public enum HTTP_ACTION { 
-    	GET, POST, PUT
+    	GET, POST, PUT, DELETE
 	};
 	public enum API_ACTION { 
     	NULL
