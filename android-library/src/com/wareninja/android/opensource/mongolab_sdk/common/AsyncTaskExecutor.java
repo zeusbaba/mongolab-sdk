@@ -171,6 +171,12 @@ public class AsyncTaskExecutor extends AsyncTaskEx<Bundle, Void, Bundle> {
 		if (requestParams.containsKey(AppContext.API_PARAM_COUNT)) {
 			extraParams.putString(AppContext.API_PARAM_COUNT, requestParams.getString(AppContext.API_PARAM_COUNT));
 		}
+		if (requestParams.containsKey(AppContext.API_PARAM_M)) {
+			extraParams.putString(AppContext.API_PARAM_M, requestParams.getString(AppContext.API_PARAM_M));
+		}
+		if (requestParams.containsKey(AppContext.API_PARAM_U)) {
+			extraParams.putString(AppContext.API_PARAM_U, requestParams.getString(AppContext.API_PARAM_U));
+		}
 		
 		if (!AppContext.HTTP_ACTION.GET.equals(httpAction)
 				&& requestParams.containsKey(AppContext.API_PARAM_JSONBODY)
@@ -201,7 +207,14 @@ public class AsyncTaskExecutor extends AsyncTaskEx<Bundle, Void, Bundle> {
 			}
 			else if (AppContext.HTTP_ACTION.PUT.equals(httpAction)) {
 				target += (target.contains("&"))? "&":"?";
-				target += AppContext.API_PARAM_APIKEY+"="+extraParams.getString(AppContext.API_PARAM_APIKEY);
+				//target += AppContext.API_PARAM_APIKEY+"="+extraParams.getString(AppContext.API_PARAM_APIKEY);
+				if (extraParams!=null && extraParams.size()>0) {
+		    		for (String key:extraParams.keySet()) {
+		    			target += key + "=" +extraParams.getString(key) +"&";
+					}
+		    	}
+				if (target.endsWith("&")) target = target.substring(0, target.length()-1);
+				
 				rawResponse = webService.webInvokeWithJsonPUT(target, extraParams.getString(AppContext.API_PARAM_JSONBODY));
 			}
 			else {

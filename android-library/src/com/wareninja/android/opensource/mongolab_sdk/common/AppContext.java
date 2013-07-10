@@ -47,6 +47,8 @@ public class AppContext {
     public static String API_PARAM_SKIP = "sk";
     public static String API_PARAM_FO = "fo";
     public static String API_PARAM_COUNT = "c";
+    public static String API_PARAM_M = "m";
+    public static String API_PARAM_U = "u";
     
     public static String API_PARAM_APIKEY = "apiKey";
     

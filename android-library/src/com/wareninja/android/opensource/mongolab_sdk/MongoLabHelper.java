@@ -329,4 +329,89 @@ public class MongoLabHelper {
 		});
 		mAsyncTaskExecutor.execute(reqParams);
 	}
+    
+    /*
+     * UPDATE DOCUMENTS in a specific collection
+     * 
+     * >> Update multiple documents
+     * To update one or more documents in the specified collection, use a PUT request with a replacement document or update modifiers in the body 
+     * PUT /databases/{database}/collections/{collection}
+     * Content-Type: application/json
+     * Body: <JSON data>
+     * 
+     * Optional parameters:
+     * [q=<query>][&m=true][&u=true]
+     *
+     */
+    public void updateDocuments(String database, String collection, List<String> documents
+    		, final GenericRequestListener reqListener) {
+    	updateDocuments(database, collection, documents, new HashMap<String,String>(), reqListener);
+    }
+    public void updateDocuments(String database, String collection, List<String> documents, Map<String, String> optionalParams
+    		, final GenericRequestListener reqListener) {
+    	
+    	Bundle reqParams = new Bundle();
+    	reqParams.putString(AppContext.API_PARAM_APIKEY, apiKey);
+    	reqParams.putString("database", database);
+    	reqParams.putString("collection", collection);
+    	
+    	if (optionalParams!=null && optionalParams.size()>0) {
+    		for (Map.Entry<String,String> entry:optionalParams.entrySet()) {
+    			reqParams.putString(entry.getKey(), entry.getValue());
+			}
+    	}
+    	
+    	JsonArray jsonArray = new JsonArray();
+    	JsonObject jsonObject;
+    	for (String document:documents) {
+    		jsonObject = new JsonObject();
+    		jsonObject = jsonParser.parse(document).getAsJsonObject();
+    		jsonArray.add(jsonObject);
+    	}
+    	reqParams.putSerializable(AppContext.API_PARAM_JSONBODY
+    			, CommonUtils.getGsonSimple().toJson(jsonArray)//, jsonArray.toString()
+    			);
+    	
+        AsyncTaskExecutor mAsyncTaskExecutor = new AsyncTaskExecutor( mContext );
+        mAsyncTaskExecutor.setApiAction(AppContext.API_ACTION.DOCUMENTS);
+        mAsyncTaskExecutor.setHttpAction(AppContext.HTTP_ACTION.PUT);
+		mAsyncTaskExecutor.setReqListener(new GenericRequestListener() {
+
+			@Override
+			public void onComplete_wBundle(Bundle responseParams) {
+
+				//if (AppContext.isDebugMode()) Log.d(TAG, "responseParams-> " + responseParams);
+
+				if (responseParams.containsKey(AppContext.API_DATA_PARAM_RESPONSEMODEL)) {
+
+					ResponseModel mResponseModel = (ResponseModel) responseParams.getSerializable(AppContext.API_DATA_PARAM_RESPONSEMODEL);
+					if (AppContext.isDebugMode()) Log.d(TAG, "mResponseModel-> " + mResponseModel);
+					if (mResponseModel.meta.code <= 201) {// 200 or 201 is success!!!
+					  
+						Bundle respBundle = new Bundle();
+						//-respBundle.putSerializable(AppContext.DATA_EXTRA_SNPOIMETALIST, ptMetaList);
+						respBundle.putSerializable(AppContext.API_DATA_PARAM_RESPONSEMODEL, mResponseModel);
+						if (reqListener!=null) reqListener.onComplete_wBundle(respBundle);
+						
+					} else {
+						if (reqListener!=null) reqListener.onError_wMeta(mResponseModel.meta);
+					}
+				}
+			}
+
+			@Override
+			public void onError(String e) {
+				if (reqListener!=null) reqListener.onError_wMeta( new ResponseMeta("onError : "+ e.toString()) );
+			}
+			@Override
+			public void onError_wMeta(ResponseMeta responseMeta) {
+				if (reqListener!=null) reqListener.onError_wMeta(responseMeta);
+		    }
+			@Override
+			public void onBegin() {
+				if (reqListener!=null) reqListener.onBegin();
+			}
+		});
+		mAsyncTaskExecutor.execute(reqParams);
+	}
 }
