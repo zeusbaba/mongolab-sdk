@@ -12,7 +12,9 @@
 package com.wareninja.android.opensource.mongolab_sdk;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -195,11 +197,21 @@ public class MongoLabHelper {
      */
     public void listDocuments(String database, String collection
     		, final GenericRequestListener reqListener) {
+    	listDocuments(database, collection, new HashMap<String, String>(), reqListener);
+    }
+    public void listDocuments(String database, String collection, Map<String, String> optionalParams
+    		, final GenericRequestListener reqListener) {
     	
     	Bundle reqParams = new Bundle();
     	reqParams.putString(AppContext.API_PARAM_APIKEY, apiKey);
     	reqParams.putString("database", database);
     	reqParams.putString("collection", collection);
+    	
+    	if (optionalParams!=null && optionalParams.size()>0) {
+    		for (Map.Entry<String,String> entry:optionalParams.entrySet()) {
+    			reqParams.putString(entry.getKey(), entry.getValue());
+			}
+    	}
     	
         AsyncTaskExecutor mAsyncTaskExecutor = new AsyncTaskExecutor( mContext );
         mAsyncTaskExecutor.setApiAction(AppContext.API_ACTION.DOCUMENTS);

@@ -162,6 +162,15 @@ public class AsyncTaskExecutor extends AsyncTaskEx<Bundle, Void, Bundle> {
 		if (requestParams.containsKey(AppContext.API_PARAM_FIELDS)) {
 			extraParams.putString(AppContext.API_PARAM_FIELDS, requestParams.getString(AppContext.API_PARAM_FIELDS));
 		}
+		if (requestParams.containsKey(AppContext.API_PARAM_SKIP)) {
+			extraParams.putString(AppContext.API_PARAM_SKIP, requestParams.getString(AppContext.API_PARAM_SKIP));
+		}
+		if (requestParams.containsKey(AppContext.API_PARAM_FO)) {
+			extraParams.putString(AppContext.API_PARAM_FO, requestParams.getString(AppContext.API_PARAM_FO));
+		}
+		if (requestParams.containsKey(AppContext.API_PARAM_COUNT)) {
+			extraParams.putString(AppContext.API_PARAM_COUNT, requestParams.getString(AppContext.API_PARAM_COUNT));
+		}
 		
 		if (!AppContext.HTTP_ACTION.GET.equals(httpAction)
 				&& requestParams.containsKey(AppContext.API_PARAM_JSONBODY)
