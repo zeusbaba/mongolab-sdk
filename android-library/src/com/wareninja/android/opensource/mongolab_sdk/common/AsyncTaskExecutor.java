@@ -189,7 +189,8 @@ public class AsyncTaskExecutor extends AsyncTaskEx<Bundle, Void, Bundle> {
 				}
 			}
 
-			webService.addRequestHeader("User-Agent", CommonUtils.getMyUserAgent(taskContext));
+			// optional: you can also append custom user-agent 
+			//-webService.addRequestHeader("User-Agent", CommonUtils.getMyUserAgent(taskContext));
 			webService.addRequestHeader("Accept", "application/json");
 			
 			if (AppContext.HTTP_ACTION.POST.equals(httpAction)) {
