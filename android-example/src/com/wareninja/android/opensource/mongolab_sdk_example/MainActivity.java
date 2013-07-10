@@ -32,8 +32,12 @@ public class MainActivity extends Activity {
 		quickTesting();
 	}
 
+	/*
+	 * Quick examples of basic usage!
+	 */
 	MongoLabHelper mongoLabHelper;
 	protected void quickTesting () {
+		
 		try {
 			// FIXME: you MUST use your own apiKey!!! see docs: https://support.mongolab.com/entries/20433053-REST-API-for-MongoDB 
 			mongoLabHelper = new MongoLabHelper(mContext, mContext.getString(R.string.mongolab_api_key));
@@ -49,11 +53,10 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onBegin() {
-				// TODO: we can use to display progress dialog etc
+				// NOTE: we can use to display progress dialog etc
 			}
 			@Override
 			public void onError_wMeta(ResponseMeta responseMeta) {
-				// TODO: 
 				Log.w(TAG, "listDatabases | " + "onError_wMeta -> " + responseMeta.toString());
 			}
 			
@@ -70,11 +73,10 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onBegin() {
-				// TODO: we can use to display progress dialog etc
+				// NOTE: we can use to display progress dialog etc
 			}
 			@Override
-			public void onError_wMeta(ResponseMeta responseMeta) {
-				// TODO: 
+			public void onError_wMeta(ResponseMeta responseMeta) { 
 				Log.w(TAG, "listCollections | " + "onError_wMeta -> " + responseMeta.toString());
 			}
 			
@@ -98,11 +100,11 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onBegin() {
-				// TODO: we can use to display progress dialog etc
+				// NOTE: we can use to display progress dialog etc
 			}
 			@Override
 			public void onError_wMeta(ResponseMeta responseMeta) {
-				// TODO: 
+				// NOTE: 
 				Log.w(TAG, "createDocuments | " + "onError_wMeta -> " + responseMeta.toString());
 			}
 			
@@ -115,11 +117,10 @@ public class MainActivity extends Activity {
 
 					@Override
 					public void onBegin() {
-						// TODO: we can use to display progress dialog etc
+						// NOTE: we can use to display progress dialog etc
 					}
 					@Override
-					public void onError_wMeta(ResponseMeta responseMeta) {
-						// TODO: 
+					public void onError_wMeta(ResponseMeta responseMeta) { 
 						Log.w(TAG, "listDocuments | " + "onError_wMeta -> " + responseMeta.toString());
 					}
 					
