@@ -134,6 +134,54 @@ public class MainActivity extends Activity {
                 }
             });
 		
+		
+		Log.d(TAG, ">>> updateDocuments");
+		List<String> documents4update = new ArrayList<String>();
+		JsonObject jsonObject4update = new JsonObject();
+		// NOTE: you must have the _id of the document you want to update. otherwise this will create a new document if _id doesn't match
+		jsonObject4update.addProperty("_id", "id_of_the_item_to_update");
+		jsonObject4update.addProperty("key1", "value-"+System.currentTimeMillis());
+		jsonObject4update.addProperty("key2", "value-"+System.currentTimeMillis());
+		documents4update.add( CommonUtils.getGsonSimple().toJson(jsonObject) );
+		// NOTE: 'param1' is database name, 'param2' is collection name!!!
+		mongoLabHelper.updateDocuments("dev-playground", "dev-collection", documents4update
+				, new GenericRequestListener() {
+
+			@Override
+			public void onBegin() {
+				// NOTE: we can use to display progress dialog etc
+			}
+			@Override
+			public void onError_wMeta(ResponseMeta responseMeta) {
+				// NOTE: 
+				Log.w(TAG, "updateDocuments | " + "onError_wMeta -> " + responseMeta.toString());
+			}
+			
+			@Override
+			public void onComplete_wBundle(Bundle responseParams) {
+				Log.d(TAG, "updateDocuments | " + "onComplete_wBundle -> " + responseParams);
+				
+                Log.d(TAG, ">>> listDocuments");
+				mongoLabHelper.listDocuments("dev-playground", "dev-collection", new GenericRequestListener() {
+
+					@Override
+					public void onBegin() {
+						// NOTE: we can use to display progress dialog etc
+					}
+					@Override
+					public void onError_wMeta(ResponseMeta responseMeta) { 
+						Log.w(TAG, "listDocuments | " + "onError_wMeta -> " + responseMeta.toString());
+					}
+					
+					@Override
+					public void onComplete_wBundle(Bundle responseParams) {
+						Log.d(TAG, "listDocuments | " + "onComplete_wBundle -> " + responseParams);
+						
+					}			
+				});
+
+                }
+            });
 	}
 
 	@Override
