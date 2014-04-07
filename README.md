@@ -1,9 +1,10 @@
 mongolab-sdk
 ====================
 
-SDKs for Mongolab.com     
-Android, iOS, JS, ....    
+SDKs for Mongolab.com      
+> Android - ready!    
+> iOS, JS - open for contribution!     
     
 Implementation of MongoLab RESTful interface:     
-see docs: https://support.mongolab.com/entries/20433053-REST-API-for-MongoDB    
+see docs: http://docs.mongolab.com/restapi/        
    
